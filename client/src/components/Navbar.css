@@ -1,0 +1,318 @@
+/* ============================================================
+   Navbar — Floating Glassmorphic Pill Navigation
+   ============================================================ */
+
+/* --- Container: fixed top center --- */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  padding: var(--space-md) var(--space-md) 0;
+  z-index: var(--z-navbar);
+  pointer-events: none;
+  transition: transform 0.45s var(--ease-out-expo);
+  will-change: transform;
+}
+
+.navbar--hidden {
+  transform: translateY(-120%);
+}
+
+/* --- Pill wrapper --- */
+.navbar-pill {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--bg-glass);
+  backdrop-filter: blur(24px) saturate(1.6);
+  -webkit-backdrop-filter: blur(24px) saturate(1.6);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-md);
+  pointer-events: auto;
+  transition:
+    background-color var(--duration-slow) var(--ease-out-expo),
+    border-color var(--duration-normal),
+    box-shadow var(--duration-normal);
+  max-width: 100%;
+}
+
+.navbar-pill:hover {
+  border-color: var(--border-default);
+}
+
+/* --- Logo / Monogram --- */
+.navbar-logo {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--text-inverse);
+  background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+  flex-shrink: 0;
+  text-decoration: none;
+  transition: transform var(--duration-normal) var(--ease-spring);
+  letter-spacing: -0.02em;
+}
+
+.navbar-logo:hover {
+  transform: scale(1.1);
+  color: var(--text-inverse);
+}
+
+/* --- Desktop Links --- */
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0 var(--space-xs);
+}
+
+.navbar-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-xs) var(--space-sm);
+  font-family: var(--font-primary);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-secondary);
+  border-radius: var(--radius-full);
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    color var(--duration-fast),
+    background-color var(--duration-fast);
+}
+
+.navbar-link:hover {
+  color: var(--text-primary);
+  background: var(--bg-card-hover);
+}
+
+.navbar-link--active {
+  color: var(--accent-1);
+}
+
+/* Active indicator dot */
+.navbar-link--active::after {
+  content: "";
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%) scale(1);
+  width: 4px;
+  height: 4px;
+  border-radius: var(--radius-full);
+  background: var(--accent-1);
+  box-shadow: 0 0 8px rgba(var(--accent-1-rgb), 0.6);
+  animation: navbar-dotPulse 2s ease-in-out infinite;
+}
+
+@keyframes navbar-dotPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* --- Divider --- */
+.navbar-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--border-default);
+  margin: 0 var(--space-xs);
+  flex-shrink: 0;
+}
+
+/* --- Hamburger Button (mobile) --- */
+.navbar-hamburger {
+  display: none;
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  flex-shrink: 0;
+  position: relative;
+  transition: background-color var(--duration-fast);
+}
+
+.navbar-hamburger:hover {
+  background: var(--bg-card-hover);
+}
+
+/* Three animated lines → X morph */
+.navbar-hamburger-lines {
+  width: 18px;
+  height: 14px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.navbar-hamburger-line {
+  display: block;
+  width: 100%;
+  height: 2px;
+  border-radius: var(--radius-full);
+  background: var(--text-primary);
+  transition:
+    transform 0.35s var(--ease-out-expo),
+    opacity 0.25s var(--ease-out-expo),
+    width 0.35s var(--ease-out-expo);
+  transform-origin: center;
+}
+
+/* Open state → X */
+.navbar-hamburger--open .navbar-hamburger-line:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.navbar-hamburger--open .navbar-hamburger-line:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.navbar-hamburger--open .navbar-hamburger-line:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+/* --- Mobile Menu Panel --- */
+.navbar-mobileMenu {
+  position: fixed;
+  top: 64px;
+  left: var(--space-md);
+  right: var(--space-md);
+  background: var(--bg-glass-strong);
+  backdrop-filter: blur(24px) saturate(1.6);
+  -webkit-backdrop-filter: blur(24px) saturate(1.6);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  z-index: var(--z-navbar);
+  pointer-events: auto;
+  /* Animation */
+  opacity: 0;
+  transform: translateY(-12px) scale(0.97);
+  visibility: hidden;
+  transition:
+    opacity 0.3s var(--ease-out-expo),
+    transform 0.3s var(--ease-out-expo),
+    visibility 0s 0.3s;
+}
+
+.navbar-mobileMenu--open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  visibility: visible;
+  transition:
+    opacity 0.3s var(--ease-out-expo),
+    transform 0.3s var(--ease-out-expo),
+    visibility 0s 0s;
+}
+
+.navbar-mobileLink {
+  display: flex;
+  align-items: center;
+  padding: var(--space-sm) var(--space-md);
+  font-family: var(--font-primary);
+  font-size: var(--text-base);
+  font-weight: 500;
+  color: var(--text-secondary);
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  transition:
+    color var(--duration-fast),
+    background-color var(--duration-fast);
+}
+
+.navbar-mobileLink:hover {
+  color: var(--text-primary);
+  background: var(--bg-card-hover);
+}
+
+.navbar-mobileLink--active {
+  color: var(--accent-1);
+  background: rgba(var(--accent-1-rgb), 0.08);
+}
+
+/* Mobile menu backdrop overlay */
+.navbar-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: calc(var(--z-navbar) - 1);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.3s var(--ease-out-expo),
+    visibility 0s 0.3s;
+}
+
+.navbar-backdrop--visible {
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity 0.3s var(--ease-out-expo),
+    visibility 0s 0s;
+}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+@media (max-width: 768px) {
+  .navbar-links {
+    display: none;
+  }
+
+  .navbar-divider {
+    display: none;
+  }
+
+  .navbar-hamburger {
+    display: flex;
+  }
+
+  .navbar-pill {
+    width: 100%;
+    justify-content: space-between;
+    padding: var(--space-xs) var(--space-xs) var(--space-xs) var(--space-sm);
+  }
+}
+
+@media (min-width: 769px) {
+  .navbar-mobileMenu,
+  .navbar-backdrop {
+    display: none !important;
+  }
+}
+
+/* ---- Reduced Motion ---- */
+@media (prefers-reduced-motion: reduce) {
+  .navbar {
+    transition: none;
+  }
+  .navbar-mobileMenu {
+    transition: none;
+  }
+  .navbar-hamburger-line {
+    transition: none;
+  }
+  .navbar-link--active::after {
+    animation: none;
+  }
+}

@@ -1,0 +1,90 @@
+/* ============================================================
+   ScrollProgress — Scroll Progress Indicator
+   ============================================================ */
+
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  z-index: 501; /* Above navbar (--z-navbar = 500) */
+  pointer-events: none;
+  background: transparent;
+}
+
+/* --- The actual progress bar --- */
+.scroll-progress__bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--accent-1) 0%,
+    var(--accent-2) 50%,
+    var(--accent-3) 100%
+  );
+  transform: scaleX(0);
+  transform-origin: left center;
+  will-change: transform;
+  /* No CSS transition — updated via rAF for buttery smooth perf */
+}
+
+/* --- Glow bloom at the leading edge --- */
+.scroll-progress__glow {
+  position: absolute;
+  top: -4px;
+  right: -2px;
+  width: 120px;
+  height: 12px;
+  background: radial-gradient(
+    ellipse at right center,
+    rgba(var(--accent-2-rgb), 0.6) 0%,
+    rgba(var(--accent-3-rgb), 0.3) 30%,
+    transparent 80%
+  );
+  border-radius: var(--radius-full);
+  filter: blur(4px);
+  opacity: 0;
+  transition: opacity 0.3s var(--ease-out-expo);
+  pointer-events: none;
+}
+
+/* Show glow when actively scrolling */
+.scroll-progress--scrolling .scroll-progress__glow {
+  opacity: 1;
+}
+
+/* --- Subtle shadow beneath the bar for depth --- */
+.scroll-progress__bar::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  background: linear-gradient(
+    90deg,
+    rgba(var(--accent-1-rgb), 0.2) 0%,
+    rgba(var(--accent-2-rgb), 0.3) 50%,
+    rgba(var(--accent-3-rgb), 0.2) 100%
+  );
+  filter: blur(6px);
+  transform: translateY(100%);
+  opacity: 0.5;
+}
+
+/* ============================================================
+   Reduced motion: simplify
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .scroll-progress__glow {
+    display: none;
+  }
+  
+  .scroll-progress__bar::after {
+    display: none;
+  }
+}

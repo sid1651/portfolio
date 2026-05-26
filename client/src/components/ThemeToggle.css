@@ -1,0 +1,128 @@
+/* ============================================================
+   ThemeToggle — Sun / Moon Morph Toggle
+   ============================================================ */
+
+.themeToggle-button {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-default);
+  background: var(--bg-card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    border-color var(--duration-normal) var(--ease-out-expo),
+    background-color var(--duration-normal) var(--ease-out-expo),
+    box-shadow var(--duration-normal) var(--ease-out-expo);
+  flex-shrink: 0;
+}
+
+.themeToggle-button:hover {
+  border-color: var(--accent-1);
+  background: rgba(var(--accent-1-rgb), 0.08);
+  box-shadow: var(--glow-sm);
+}
+
+.themeToggle-button:active {
+  transform: scale(0.92);
+}
+
+/* Glow ring */
+.themeToggle-button::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: var(--radius-full);
+  background: radial-gradient(
+    circle,
+    rgba(var(--accent-1-rgb), 0.12) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity var(--duration-normal);
+  pointer-events: none;
+}
+
+.themeToggle-button:hover::after {
+  opacity: 1;
+}
+
+/* Icon wrapper */
+.themeToggle-iconWrap {
+  width: 20px;
+  height: 20px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* SVG */
+.themeToggle-icon {
+  width: 20px;
+  height: 20px;
+  color: var(--text-primary);
+  transition:
+    transform 0.6s var(--ease-out-expo),
+    opacity 0.3s var(--ease-out-expo),
+    color var(--duration-normal);
+  will-change: transform, opacity;
+}
+
+/* The icon we're transitioning TO gets the morph animation */
+.themeToggle-icon--entering {
+  animation: themeToggle-morphIn 0.6s var(--ease-out-expo) forwards;
+}
+
+/* The icon we're transitioning FROM */
+.themeToggle-icon--exiting {
+  animation: themeToggle-morphOut 0.6s var(--ease-out-expo) forwards;
+  position: absolute;
+  inset: 0;
+}
+
+@keyframes themeToggle-morphIn {
+  0% {
+    opacity: 0;
+    transform: rotate(-180deg) scale(0.4);
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+@keyframes themeToggle-morphOut {
+  0% {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(180deg) scale(0.4);
+  }
+}
+
+/* Sun-specific: warm tint when sun is shown */
+[data-theme="light"] .themeToggle-icon {
+  color: #e8a317;
+}
+
+/* Moon: subtle cool tint */
+:root .themeToggle-icon {
+  color: var(--accent-4);
+}
+
+/* ---- Reduced Motion ---- */
+@media (prefers-reduced-motion: reduce) {
+  .themeToggle-icon--entering,
+  .themeToggle-icon--exiting {
+    animation: none;
+  }
+  .themeToggle-button:active {
+    transform: none;
+  }
+}

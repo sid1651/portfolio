@@ -1,0 +1,192 @@
+/* ============================================================
+   CustomCursor — Magnetic Morphing Cursor
+   ============================================================ */
+
+/* --- Hide default cursor when custom cursor is active --- */
+.cursor-active,
+.cursor-active * {
+  cursor: none !important;
+}
+
+/* --- Base Cursor Container --- */
+.custom-cursor {
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: var(--z-cursor);
+  mix-blend-mode: difference;
+}
+
+/* --- Outer Ring --- */
+.custom-cursor__ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 40px;
+  border: 1.5px solid var(--text-secondary);
+  border-radius: var(--radius-full);
+  pointer-events: none;
+  z-index: var(--z-cursor);
+  will-change: transform;
+  transition: width 0.4s var(--ease-out-expo),
+              height 0.4s var(--ease-out-expo),
+              border-color 0.3s var(--ease-out-expo),
+              border-width 0.3s var(--ease-out-expo),
+              border-radius 0.3s var(--ease-out-expo),
+              opacity 0.3s var(--ease-out-expo),
+              background-color 0.3s var(--ease-out-expo);
+  /* Center the ring on the cursor point */
+  margin-left: -20px;
+  margin-top: -20px;
+  background-color: transparent;
+  opacity: 1;
+}
+
+/* --- Inner Dot --- */
+.custom-cursor__dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  background: var(--text-primary);
+  border-radius: var(--radius-full);
+  pointer-events: none;
+  z-index: var(--z-cursor);
+  will-change: transform;
+  transition: width 0.3s var(--ease-out-expo),
+              height 0.3s var(--ease-out-expo),
+              opacity 0.3s var(--ease-out-expo),
+              background-color 0.3s var(--ease-out-expo);
+  /* Center the dot on the cursor point */
+  margin-left: -3px;
+  margin-top: -3px;
+}
+
+/* ============================================================
+   STATE: Hovering interactive elements (links, buttons)
+   ============================================================ */
+.custom-cursor__ring--hovering {
+  width: 64px;
+  height: 64px;
+  margin-left: -32px;
+  margin-top: -32px;
+  border-color: var(--accent-1);
+  border-width: 2px;
+  background-color: rgba(var(--accent-1-rgb), 0.06);
+}
+
+.custom-cursor__dot--hovering {
+  width: 4px;
+  height: 4px;
+  margin-left: -2px;
+  margin-top: -2px;
+  opacity: 0.6;
+  background-color: var(--accent-1);
+}
+
+/* ============================================================
+   STATE: Hovering text
+   ============================================================ */
+.custom-cursor__ring--text {
+  width: 3px;
+  height: 28px;
+  margin-left: -1.5px;
+  margin-top: -14px;
+  border-radius: 2px;
+  border-color: var(--accent-2);
+  border-width: 0;
+  background-color: var(--accent-2);
+  opacity: 0.7;
+}
+
+.custom-cursor__dot--text {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* ============================================================
+   STATE: Clicking / Mousedown
+   ============================================================ */
+.custom-cursor__ring--clicking {
+  width: 32px;
+  height: 32px;
+  margin-left: -16px;
+  margin-top: -16px;
+  border-color: var(--accent-3);
+  border-width: 2.5px;
+  background-color: rgba(var(--accent-3-rgb), 0.1);
+}
+
+.custom-cursor__dot--clicking {
+  width: 8px;
+  height: 8px;
+  margin-left: -4px;
+  margin-top: -4px;
+  background-color: var(--accent-3);
+}
+
+/* ============================================================
+   STATE: Hidden (mouse left the viewport)
+   ============================================================ */
+.custom-cursor__ring--hidden {
+  opacity: 0;
+  width: 10px;
+  height: 10px;
+  margin-left: -5px;
+  margin-top: -5px;
+}
+
+.custom-cursor__dot--hidden {
+  opacity: 0;
+}
+
+/* ============================================================
+   Glow trail effect on the ring
+   ============================================================ */
+.custom-cursor__ring::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle,
+    rgba(var(--accent-1-rgb), 0.15) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.4s var(--ease-out-expo);
+  pointer-events: none;
+}
+
+.custom-cursor__ring--hovering::after {
+  opacity: 1;
+}
+
+/* ============================================================
+   Reduced motion: disable the custom cursor entirely
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .custom-cursor__ring,
+  .custom-cursor__dot {
+    display: none;
+  }
+
+  .cursor-active,
+  .cursor-active * {
+    cursor: auto !important;
+  }
+}
+
+/* ============================================================
+   Coarse pointer / touch devices: hide completely
+   ============================================================ */
+@media (pointer: coarse), (hover: none) {
+  .custom-cursor__ring,
+  .custom-cursor__dot {
+    display: none !important;
+  }
+}
