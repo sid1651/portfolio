@@ -18,6 +18,7 @@ export const PERSONAL = {
     university: 'Bennett University (The Times Group)',
     period: '2022 – 2026',
   },
+  resumeUrl: '/siddharth-resume.pdf',
 };
 
 export const NAV_LINKS = [
@@ -26,6 +27,7 @@ export const NAV_LINKS = [
   { id: 'skills', label: 'Skills' },
   { id: 'projects', label: 'Projects' },
   { id: 'experience', label: 'Experience' },
+  { id: 'resume', label: 'Resume' },
   { id: 'contact', label: 'Contact' },
 ];
 
@@ -35,6 +37,36 @@ export const STATS = [
   { value: 3, suffix: '%', label: 'Top Global Rank' },
   { value: 2, suffix: '+', label: 'Internships' },
 ];
+
+export const CURRENTLY_BUILDING = [
+  'Real-time collaboration flows with shared cursors, rooms, and low-latency sync.',
+  'Clean React + TypeScript interfaces that stay responsive under heavier state updates.',
+  'Backend systems that are easier to debug, test, and evolve as projects grow.',
+] as const;
+
+export const CURRENTLY_LEARNING = [
+  'System design tradeoffs for scaling multi-user applications beyond the happy path.',
+  'Performance profiling across network, rendering, and database bottlenecks.',
+  'Stronger testing discipline around integration boundaries and production-like scenarios.',
+] as const;
+
+export const ENGINEERING_WINS = [
+  {
+    title: 'Architecture mindset',
+    description:
+      'I break products into clear frontend, API, and data concerns so features can ship quickly without turning into tightly coupled code.',
+  },
+  {
+    title: 'Performance focus',
+    description:
+      'I care about measurable speed improvements, from API response time and database tuning to bundle weight and meaningful paint.',
+  },
+  {
+    title: 'Execution under real usage',
+    description:
+      'Projects are built with practical concerns in mind: concurrency, validation, observability, and maintainable debugging paths.',
+  },
+] as const;
 
 export interface Skill {
   name: string;
@@ -88,6 +120,16 @@ export interface Project {
   highlights: string[];
 }
 
+export interface DesignProject {
+  id: number;
+  title: string;
+  description: string;
+  tags: string[];
+  figmaUrl: string;
+  featured: boolean;
+  highlights: string[];
+}
+
 export const PROJECTS: Project[] = [
   {
     id: 1,
@@ -97,7 +139,7 @@ export const PROJECTS: Project[] = [
     tags: ['React', 'Node.js', 'Socket.io', 'CodeMirror', 'Piston API'],
     image: '',
     liveUrl: 'https://kodikos.onrender.com/',
-    githubUrl: 'https://github.com/sid1651',
+    githubUrl: 'https://github.com/sid1651/RealTimeCodeEditor.git',
     featured: true,
     highlights: [
       'Architected real-time collaboration with Socket.io enabling multi-user code sync with sub-100ms latency',
@@ -113,12 +155,45 @@ export const PROJECTS: Project[] = [
     tags: ['React', 'Node.js', 'MongoDB', 'Multer', 'Cloudinary'],
     image: '',
     liveUrl: 'https://estiastay.vercel.app',
-    githubUrl: 'https://github.com/sid1651',
+    githubUrl: 'https://github.com/sid1651/Estia-Stay---Hotel-Booking-Website.git',
     featured: true,
     highlights: [
       'Built a full-stack booking system handling 200+ API calls/day with secure authentication and optimized DB queries',
       'Implemented unit testing, server-side validation, and debugging processes to maintain 99.8% uptime',
       'Developed owner dashboards with analytics and automated image uploads using Multer + Cloudinary',
+    ],
+  },
+];
+
+export const DESIGN_PROJECTS: DesignProject[] = [
+  {
+    id: 1,
+    title: 'Mobile App Design',
+    description:
+      'A polished mobile UI concept focused on clear hierarchy, smooth interactions, and a modern app-like visual system.',
+    tags: ['Figma', 'Mobile UI', 'Prototype'],
+    figmaUrl:
+      'https://www.figma.com/make/VkUTUgN0dHygCl9U6foGI3/Mobile-app-design?t=h8zv7jcIwX3M7hR4-20&fullscreen=1',
+    featured: true,
+    highlights: [
+      'Designed mobile-first flows with attention to navigation clarity and visual rhythm',
+      'Explored component consistency across screens to keep the interface cohesive',
+      'Used motion-friendly layouts that can translate well into frontend implementation',
+    ],
+  },
+  {
+    id: 2,
+    title: 'Animated Testimonial Cards',
+    description:
+      'An interactive testimonial card concept built to showcase motion, storytelling, and high-end presentation details.',
+    tags: ['Figma', 'Motion Design', 'UI Cards'],
+    figmaUrl:
+      'https://www.figma.com/make/ibeZxZVed4SNc2RvkghOvc/Animated-Testimonial-Cards?t=xJn3NbKYtIoagXHC-20&fullscreen=1',
+    featured: true,
+    highlights: [
+      'Created a presentation-ready card system with expressive animation cues',
+      'Balanced readability with strong visual personality for portfolio-style showcasing',
+      'Focused on reusable layout patterns that can be implemented cleanly on the web',
     ],
   },
 ];

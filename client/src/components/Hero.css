@@ -441,6 +441,20 @@
     inset 0 0 20px rgba(var(--accent-1-rgb), 0.04);
 }
 
+.hero__btn--ghost {
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1.5px dashed var(--border-default);
+}
+
+.hero__btn--ghost:hover {
+  color: var(--text-primary);
+  border-color: var(--accent-2);
+  box-shadow:
+    0 8px 28px rgba(var(--accent-2-rgb), 0.14),
+    inset 0 0 20px rgba(var(--accent-2-rgb), 0.04);
+}
+
 /* ============================================================
    SCROLL INDICATOR
    ============================================================ */
@@ -578,6 +592,7 @@
     max-width: 280px;
     justify-content: center;
   }
+
 }
 
 @media (max-width: 480px) {
@@ -592,6 +607,7 @@
   .hero__scroll {
     bottom: var(--space-lg);
   }
+
 }
 
 /* ============================================================

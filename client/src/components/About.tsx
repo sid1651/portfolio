@@ -1,6 +1,12 @@
 import React, { useCallback } from 'react';
 import './About.css';
-import { PERSONAL, STATS } from '../utils/constants';
+import {
+  CURRENTLY_BUILDING,
+  CURRENTLY_LEARNING,
+  ENGINEERING_WINS,
+  PERSONAL,
+  STATS,
+} from '../utils/constants';
 import { useScrollRevealMultiple } from '../hooks/useScrollReveal';
 import { useCountUp } from '../hooks/useCountUp';
 
@@ -166,6 +172,54 @@ const About: React.FC = () => {
                 <p className="about-availability-value">
                   {PERSONAL.availability}
                 </p>
+              </div>
+            </div>
+          </div>
+
+          <div
+            className="about-card about-card--focus glass-card reveal delay-4"
+            onMouseMove={handleTiltMove}
+            onMouseLeave={handleTiltLeave}
+          >
+            <div className="about-card-inner">
+              <span className="about-card-kicker">Currently Building</span>
+              <ul className="about-list">
+                {CURRENTLY_BUILDING.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <div
+            className="about-card about-card--learning glass-card reveal delay-5"
+            onMouseMove={handleTiltMove}
+            onMouseLeave={handleTiltLeave}
+          >
+            <div className="about-card-inner">
+              <span className="about-card-kicker">Currently Learning</span>
+              <ul className="about-list">
+                {CURRENTLY_LEARNING.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <div
+            className="about-card about-card--wins glass-card reveal delay-6"
+            onMouseMove={handleTiltMove}
+            onMouseLeave={handleTiltLeave}
+          >
+            <div className="about-card-inner">
+              <span className="about-card-kicker">Engineering Wins</span>
+              <div className="about-win-grid">
+                {ENGINEERING_WINS.map((win) => (
+                  <article key={win.title} className="about-win">
+                    <h3>{win.title}</h3>
+                    <p>{win.description}</p>
+                  </article>
+                ))}
               </div>
             </div>
           </div>

@@ -199,7 +199,17 @@ const Hero: React.FC = () => {
           >
             Get In Touch
           </button>
+          <a
+            className="hero__btn hero__btn--ghost"
+            href={PERSONAL.resumeUrl}
+            target="_blank"
+            rel="noreferrer"
+            download
+          >
+            Download Resume
+          </a>
         </div>
+
       </div>
 
       {/* Scroll indicator */}

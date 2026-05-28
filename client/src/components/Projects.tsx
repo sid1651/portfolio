@@ -1,5 +1,10 @@
 import { useState, useCallback, useRef } from 'react';
-import { PROJECTS, type Project } from '../utils/constants';
+import {
+  DESIGN_PROJECTS,
+  PROJECTS,
+  type DesignProject,
+  type Project,
+} from '../utils/constants';
 import { useScrollRevealMultiple } from '../hooks/useScrollReveal';
 import './Projects.css';
 
@@ -7,6 +12,7 @@ import './Projects.css';
 const FILTER_CATEGORIES = [
   { id: 'all', label: 'All' },
   { id: 'web', label: 'Web' },
+  { id: 'design', label: 'Design' },
 ] as const;
 
 // ── Placeholder icons per project index ────────────────────────
@@ -31,6 +37,12 @@ const ExternalLinkIcon = () => (
     <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
     <polyline points="15 3 21 3 21 9" />
     <line x1="10" y1="14" x2="21" y2="3" />
+  </svg>
+);
+
+const FigmaIcon = () => (
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M8 2a4 4 0 1 0 0 8h4V2H8zm0 10a4 4 0 1 0 0 8 4 4 0 0 0 4-4v-4H8zm8-10h-4v8h4a4 4 0 1 0 0-8zm0 10h-4v4a4 4 0 1 0 4-4zm-4 0a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" />
   </svg>
 );
 
@@ -149,14 +161,125 @@ function ProjectCard({ project, index }: ProjectCardProps) {
   );
 }
 
+interface DesignCarouselProps {
+  projects: readonly DesignProject[];
+}
+
+function DesignCarousel({ projects }: DesignCarouselProps) {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const goToPrev = useCallback(() => {
+    setActiveIndex((prev) => (prev === 0 ? projects.length - 1 : prev - 1));
+  }, [projects.length]);
+
+  const goToNext = useCallback(() => {
+    setActiveIndex((prev) => (prev === projects.length - 1 ? 0 : prev + 1));
+  }, [projects.length]);
+
+  if (projects.length === 0) return null;
+
+  const activeProject = projects[activeIndex];
+
+  return (
+    <div className="projects-design reveal delay-2">
+      <div className="projects-design__header">
+        <div>
+          <span className="projects-design__eyebrow">Design Showcase</span>
+          <h3 className="projects-design__title">Figma explorations and interface concepts</h3>
+        </div>
+        <div className="projects-design__controls">
+          <button
+            type="button"
+            className="projects-design__nav"
+            onClick={goToPrev}
+            aria-label="Show previous design project"
+          >
+            ‹
+          </button>
+          <button
+            type="button"
+            className="projects-design__nav"
+            onClick={goToNext}
+            aria-label="Show next design project"
+          >
+            ›
+          </button>
+        </div>
+      </div>
+
+      <article className="projects-design__card">
+        <div className="projects-design__visual">
+          <div className={`projects-card-image-bg projects-card-image-bg--${activeIndex % 6}`} />
+          <div className="projects-card-image-pattern" />
+          <div className="projects-card-image-shimmer" />
+          <div className="projects-design__visualInner">
+            <div className="projects-design__iconWrap">
+              <FigmaIcon />
+            </div>
+            <span className="projects-design__visualLabel">Figma Project</span>
+          </div>
+        </div>
+
+        <div className="projects-design__content">
+          <div className="projects-design__meta">
+            {activeProject.featured && <span className="projects-design__badge">Featured Design</span>}
+            <span className="projects-design__count">
+              {String(activeIndex + 1).padStart(2, '0')} / {String(projects.length).padStart(2, '0')}
+            </span>
+          </div>
+
+          <h4 className="projects-design__projectTitle">{activeProject.title}</h4>
+          <p className="projects-design__description">{activeProject.description}</p>
+
+          <ul className="projects-design__highlights">
+            {activeProject.highlights.map((highlight) => (
+              <li key={highlight}>{highlight}</li>
+            ))}
+          </ul>
+
+          <div className="projects-design__tags">
+            {activeProject.tags.map((tag) => (
+              <span key={tag} className="projects-card-tag">{tag}</span>
+            ))}
+          </div>
+
+          <div className="projects-design__footer">
+            <a
+              href={activeProject.figmaUrl}
+              className="projects-card-cta projects-card-cta--primary"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Open in Figma
+              <ExternalLinkIcon />
+            </a>
+
+            <div className="projects-design__dots" aria-label="Select a design project">
+              {projects.map((project, index) => (
+                <button
+                  key={project.id}
+                  type="button"
+                  className={`projects-design__dot${index === activeIndex ? ' projects-design__dot--active' : ''}`}
+                  aria-label={`Show ${project.title}`}
+                  aria-pressed={index === activeIndex}
+                  onClick={() => setActiveIndex(index)}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  );
+}
+
 // ── Main Projects Section ──────────────────────────────────────
 export default function Projects() {
   const [activeFilter, setActiveFilter] = useState<string>('all');
   const containerRef = useScrollRevealMultiple();
-
-  const filteredProjects = activeFilter === 'all'
-    ? PROJECTS
-    : PROJECTS.filter((p) => p.category === activeFilter);
+  const showWebProjects = activeFilter === 'all' || activeFilter === 'web';
+  const showDesignProjects = activeFilter === 'all' || activeFilter === 'design';
+  const webProjects = PROJECTS.filter((p) => p.category === 'web');
 
   return (
     <section id="projects" className="section projects" ref={containerRef}>
@@ -186,22 +309,22 @@ export default function Projects() {
           ))}
         </div>
 
-        {/* Project Grid */}
-        <div className="projects-grid">
-          {PROJECTS.map((project, index) => {
-            const isVisible = activeFilter === 'all' || project.category === activeFilter;
-            return (
+        {showWebProjects && (
+          <div className="projects-grid">
+            {webProjects.map((project, index) => (
               <div
                 key={project.id}
-                className={`projects-card-wrapper reveal delay-${Math.min((filteredProjects.indexOf(project) % 4) + 1, 6)} ${
-                  isVisible ? 'projects-card-wrapper--visible' : 'projects-card-wrapper--hidden'
-                }`}
+                className={`projects-card-wrapper reveal delay-${Math.min((index % 4) + 1, 6)}`}
               >
                 <ProjectCard project={project} index={index} />
               </div>
-            );
-          })}
-        </div>
+            ))}
+          </div>
+        )}
+
+        {showDesignProjects && (
+          <DesignCarousel projects={DESIGN_PROJECTS} />
+        )}
       </div>
     </section>
   );
