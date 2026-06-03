@@ -210,6 +210,18 @@ export interface Experience {
 
 export const EXPERIENCES: Experience[] = [
   {
+    id: 3,
+    company: 'Bennett University',
+    role: 'B.Tech in Computer Science and Engineering',
+    period: '2022 — 2026',
+    description: 'Undergraduate degree focusing on core computer science concepts and software engineering.',
+    achievements: [
+      'Core Concepts: Data Structures & Algorithms, OOP, DBMS, System Design, CI/CD',
+      'Competitive Programming (LeetCode): Solved 220+ problems with a peak rating of 1728 (Top 3% globally)',
+    ],
+    technologies: ['C++', 'Python', 'Algorithms', 'System Design'],
+  },
+  {
     id: 1,
     company: 'BWays Tecno Solution',
     role: 'Full Stack Developer Intern',
@@ -235,18 +247,6 @@ export const EXPERIENCES: Experience[] = [
     ],
     technologies: ['Node.js', 'Express', 'MongoDB', 'React', 'Git'],
   },
-  {
-    id: 3,
-    company: 'Bennett University',
-    role: 'B.Tech in Computer Science and Engineering',
-    period: '2022 — 2026',
-    description: 'Undergraduate degree focusing on core computer science concepts and software engineering.',
-    achievements: [
-      'Core Concepts: Data Structures & Algorithms, OOP, DBMS, System Design, CI/CD',
-      'Competitive Programming (LeetCode): Solved 220+ problems with a peak rating of 1728 (Top 3% globally)',
-    ],
-    technologies: ['C++', 'Python', 'Algorithms', 'System Design'],
-  }
 ];
 
 export const SOCIAL_LINKS = [
