@@ -42,37 +42,9 @@
   z-index: 1;
 }
 
-/* Gradient border glow on hover */
-.about-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  padding: 1px;
-  border-radius: inherit;
-  background: linear-gradient(
-    var(--gradient-angle, 135deg),
-    var(--accent-1),
-    var(--accent-2),
-    var(--accent-3)
-  );
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask-composite: exclude;
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity var(--duration-slow) var(--ease-out-expo);
-  animation: rotate-gradient 4s linear infinite;
-  z-index: 2;
-}
-
-.about-card:hover::before {
-  opacity: 1;
-}
-
 .about-card:hover {
   box-shadow: var(--glow-md);
-  border-color: transparent;
+  border-color: var(--border-default);
 }
 
 /* Subtle inner glow on hover */
