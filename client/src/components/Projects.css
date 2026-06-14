@@ -128,30 +128,8 @@
 }
 
 .projects-card:hover {
-  border-color: transparent;
+  border-color: var(--border-default);
   box-shadow: var(--shadow-xl), var(--glow-md);
-}
-
-/* --- Gradient border on hover --- */
-.projects-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  padding: 1px;
-  border-radius: inherit;
-  background: linear-gradient(135deg, var(--accent-1), var(--accent-2), var(--accent-3));
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask-composite: exclude;
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity var(--duration-normal) var(--ease-out-expo);
-  z-index: 10;
-}
-
-.projects-card:hover::before {
-  opacity: 1;
 }
 
 /* --- Image Area (Top 60%) --- */
@@ -165,31 +143,21 @@
 .projects-card-image-bg {
   position: absolute;
   inset: 0;
-  transition: transform var(--duration-slower) var(--ease-out-expo);
-}
-
-.projects-card:hover .projects-card-image-bg {
-  transform: scale(1.05);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01)),
+    var(--bg-secondary);
 }
 
 /* Gradient variants by index */
-.projects-card-image-bg--0 {
-  background: linear-gradient(135deg, #6c5ce7 0%, #00cec9 50%, #0984e3 100%);
-}
-.projects-card-image-bg--1 {
-  background: linear-gradient(135deg, #fd79a8 0%, #6c5ce7 50%, #a29bfe 100%);
-}
-.projects-card-image-bg--2 {
-  background: linear-gradient(135deg, #00cec9 0%, #55efc4 50%, #ffeaa7 100%);
-}
-.projects-card-image-bg--3 {
-  background: linear-gradient(135deg, #e17055 0%, #fd79a8 50%, #6c5ce7 100%);
-}
-.projects-card-image-bg--4 {
-  background: linear-gradient(135deg, #0984e3 0%, #00cec9 50%, #55efc4 100%);
-}
+.projects-card-image-bg--0,
+.projects-card-image-bg--1,
+.projects-card-image-bg--2,
+.projects-card-image-bg--3,
+.projects-card-image-bg--4,
 .projects-card-image-bg--5 {
-  background: linear-gradient(135deg, #ffeaa7 0%, #fd79a8 50%, #e17055 100%);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01)),
+    var(--bg-secondary);
 }
 
 /* Dot pattern overlay */
