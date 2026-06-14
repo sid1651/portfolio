@@ -196,6 +196,36 @@ export const DESIGN_PROJECTS: DesignProject[] = [
       'Focused on reusable layout patterns that can be implemented cleanly on the web',
     ],
   },
+  {
+    id: 3,
+    title: 'Use Reference Image Only',
+    description:
+      'A Figma Make concept focused on transforming a visual reference into a polished interface while preserving the source image direction.',
+    tags: ['Figma', 'Reference UI', 'Visual Design'],
+    figmaUrl:
+      'https://www.figma.com/make/OeQgkRI3wNunYqUuQKJ0gq/Use-Reference-Image-Only?t=CdtoeY44PPZHEyre-20&fullscreen=1',
+    featured: false,
+    highlights: [
+      'Built a reference-led design exploration with close attention to visual matching',
+      'Used the provided image direction as the main design constraint for layout decisions',
+      'Refined spacing, hierarchy, and presentation details for portfolio showcasing',
+    ],
+  },
+  {
+    id: 4,
+    title: 'Replicate Page Design',
+    description:
+      'A Figma Make page replication project focused on matching an existing visual direction with careful layout, spacing, and interface polish.',
+    tags: ['Figma', 'Page Design', 'UI Replication'],
+    figmaUrl:
+      'https://www.figma.com/make/I4aznPq4OFmqFa7erGcICo/Replicate-Page-Design?t=OGTB3AAL2GMWevMk-20&fullscreen=1',
+    featured: false,
+    highlights: [
+      'Replicated a page layout with attention to visual hierarchy and spacing accuracy',
+      'Translated the reference direction into a clean, portfolio-ready interface',
+      'Focused on consistency across typography, structure, and presentation details',
+    ],
+  },
 ];
 
 export interface Experience {
