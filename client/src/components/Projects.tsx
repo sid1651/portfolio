@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import {
   DESIGN_PROJECTS,
   PROJECTS,
@@ -145,19 +145,111 @@ function ProjectCard({ project, index }: ProjectCardProps) {
               View Project
               <ArrowRightIcon />
             </a>
-            <a
-              href={project.githubUrl}
-              className="projects-card-cta projects-card-cta--secondary"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Source Code
-              <ExternalLinkIcon />
-            </a>
+            {/* Only for projects with a public repo */}
+            {project.githubUrl && (
+              <a
+                href={project.githubUrl}
+                className="projects-card-cta projects-card-cta--secondary"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Source Code
+                <ExternalLinkIcon />
+              </a>
+            )}
           </div>
         </div>
       </div>
     </article>
+  );
+}
+
+// ── Web Projects Carousel ──────────────────────────────────────
+interface ProjectsCarouselProps {
+  projects: Project[];
+}
+
+function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [atStart, setAtStart] = useState(true);
+  const [atEnd, setAtEnd] = useState(true);
+
+  const measure = useCallback((el: HTMLDivElement) => {
+    const max = el.scrollWidth - el.clientWidth;
+    setAtStart(el.scrollLeft <= 1);
+    setAtEnd(el.scrollLeft >= max - 1);
+  }, []);
+
+  // Ref callback rather than an effect, so the arrows are already in the
+  // right state on the very first paint.
+  const attachTrack = useCallback(
+    (el: HTMLDivElement | null) => {
+      trackRef.current = el;
+      if (el) measure(el);
+    },
+    [measure],
+  );
+
+  useEffect(() => {
+    const onResize = () => {
+      if (trackRef.current) measure(trackRef.current);
+    };
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, [measure]);
+
+  const scrollByCard = useCallback((direction: 1 | -1) => {
+    const el = trackRef.current;
+    if (!el) return;
+
+    const card = el.querySelector<HTMLElement>('.projects-card-wrapper');
+    const gap = parseFloat(getComputedStyle(el).columnGap) || 0;
+    const step = card ? card.offsetWidth + gap : el.clientWidth * 0.8;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    el.scrollBy({ left: direction * step, behavior: reducedMotion ? 'auto' : 'smooth' });
+  }, []);
+
+  if (projects.length === 0) return null;
+
+  return (
+    <div className="projects-carousel reveal delay-1">
+      <div className="projects-carousel__controls">
+        <button
+          type="button"
+          className="projects-design__nav"
+          onClick={() => scrollByCard(-1)}
+          disabled={atStart}
+          aria-label="Show previous projects"
+        >
+          ‹
+        </button>
+        <button
+          type="button"
+          className="projects-design__nav"
+          onClick={() => scrollByCard(1)}
+          disabled={atEnd}
+          aria-label="Show next projects"
+        >
+          ›
+        </button>
+      </div>
+
+      <div
+        ref={attachTrack}
+        className={`projects-carousel__track${atStart ? ' is-at-start' : ''}${atEnd ? ' is-at-end' : ''}`}
+        onScroll={(e) => measure(e.currentTarget)}
+        role="region"
+        aria-label="Web projects"
+        tabIndex={0}
+      >
+        {projects.map((project, index) => (
+          <div key={project.id} className="projects-card-wrapper">
+            <ProjectCard project={project} index={index} />
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -309,18 +401,7 @@ export default function Projects() {
           ))}
         </div>
 
-        {showWebProjects && (
-          <div className="projects-grid">
-            {webProjects.map((project, index) => (
-              <div
-                key={project.id}
-                className={`projects-card-wrapper reveal delay-${Math.min((index % 4) + 1, 6)}`}
-              >
-                <ProjectCard project={project} index={index} />
-              </div>
-            ))}
-          </div>
-        )}
+        {showWebProjects && <ProjectsCarousel projects={webProjects} />}
 
         {showDesignProjects && (
           <DesignCarousel projects={DESIGN_PROJECTS} />

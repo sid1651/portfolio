@@ -163,6 +163,40 @@ export const PROJECTS: Project[] = [
       'Developed owner dashboards with analytics and automated image uploads using Multer + Cloudinary',
     ],
   },
+  {
+    id: 3,
+    title: 'LumaLoop – Browser Motion Studio',
+    description:
+      'A browser-based motion studio that turns static images and clips into polished looping showcases — 62 choreographed templates, rendered entirely on-device and exported as watermark-free HD video.',
+    category: 'web',
+    tags: ['Next.js', 'React', 'Canvas', 'Video Export', 'Vercel'],
+    image: '',
+    liveUrl: 'https://amino-clone-jade.vercel.app/',
+    githubUrl: '',
+    featured: true,
+    highlights: [
+      'Built a template-driven editor with 62 choreographed motion presets across 3D, isometric, carousel, and grid-reveal categories',
+      'Kept rendering fully client-side — media never leaves the browser — with watermark-free MP4 and WebM exports',
+      'Shipped a three-step flow (pick a template, drop in media, customise and export) with multiple aspect ratios for social and web',
+    ],
+  },
+  {
+    id: 4,
+    title: 'Sphere / Point – 3D Visualizer',
+    description:
+      'An interactive Three.js playground for dotted-sphere formations — tune radius, point density, rotation, wireframe, and bloom in real time, then export the result for code, image, and 3D workflows.',
+    category: 'web',
+    tags: ['Three.js', 'React', 'WebGL', 'Vite', 'Vercel'],
+    image: '',
+    liveUrl: 'https://sphere-point-visualizer.vercel.app/',
+    githubUrl: '',
+    featured: false,
+    highlights: [
+      'Built a real-time WebGL viewport with live controls for radius, point density, rotation, wireframe, and bloom',
+      'Added a formation exporter that hands the current sphere off to code, image, and 3D pipelines including GLB',
+      'Kept the whole tool client-side and instant — no upload step, no render queue, immediate visual feedback',
+    ],
+  },
 ];
 
 export const DESIGN_PROJECTS: DesignProject[] = [
@@ -252,6 +286,19 @@ export const EXPERIENCES: Experience[] = [
     technologies: ['C++', 'Python', 'Algorithms', 'System Design'],
   },
   {
+    id: 2,
+    company: 'HKNA PVT Solution',
+    role: 'Full Stack Developer Intern',
+    period: 'Sep 2025 — Dec 2025',
+    description: 'Developed and maintained RESTful APIs and responsive frontends, achieving significant performance improvements.',
+    achievements: [
+      'Reduced average API response time by 35% through query optimization and indexing',
+      'Improved first meaningful paint and page load time by ~40% via code-splitting and lazy loading',
+      'Used Git and Agile workflows for collaboration, code reviews, and progress tracking',
+    ],
+    technologies: ['Node.js', 'Express', 'MongoDB', 'React', 'Git'],
+  },
+  {
     id: 1,
     company: 'BWays Tecno Solution',
     role: 'Full Stack Developer Intern',
@@ -265,17 +312,17 @@ export const EXPERIENCES: Experience[] = [
     technologies: ['React', 'TypeScript', '.NET', 'SQL Server'],
   },
   {
-    id: 2,
-    company: 'HKNA PVT Solution',
-    role: 'Full Stack Developer Intern',
-    period: 'Sep 2025 — Dec 2025',
-    description: 'Developed and maintained RESTful APIs and responsive frontends, achieving significant performance improvements.',
+    id: 4,
+    company: 'Enestock Pvt. Ltd.',
+    role: 'SDE Intern',
+    period: 'Jul 2026 — Present',
+    description: 'Developing immersive video streaming and SaaS eCommerce experiences across mobile and web platforms.',
     achievements: [
-      'Reduced average API response time by 35% through query optimization and indexing',
-      'Improved first meaningful paint and page load time by ~40% via code-splitting and lazy loading',
-      'Used Git and Agile workflows for collaboration, code reviews, and progress tracking',
+      'Developed a React Native application to stream 4K 360° VR videos up to 1TB using chunk-based delivery, reducing video startup time by 70%',
+      'Optimized playback with buffering management and adaptive streaming, maintaining 95%+ playback success with minimal buffering across varying network conditions',
+      'Built a scalable SaaS eCommerce platform supporting 1,000+ products with secure payments, order management, inventory tracking, and user authentication, reducing checkout time by 35%',
     ],
-    technologies: ['Node.js', 'Express', 'MongoDB', 'React', 'Git'],
+    technologies: ['React Native', 'Adaptive Streaming', 'SaaS', 'Payments', 'Authentication'],
   },
 ];
 

@@ -1,8 +1,12 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { Suspense, lazy, useState, useEffect, useRef, useCallback } from 'react';
 import { SKILLS, SKILL_CATEGORIES } from '../utils/constants';
 import type { Skill } from '../utils/constants';
 import { useScrollRevealMultiple } from '../hooks/useScrollReveal';
+import { useNearViewport, useQuality } from '../three/hooks';
 import './Skills.css';
+
+/* Shares the three.js chunk with the hero scene */
+const SkillsOrb = lazy(() => import('../three/SkillsOrb'));
 
 type CategoryFilter = 'all' | Skill['category'];
 
@@ -13,6 +17,10 @@ export default function Skills() {
   const [barsRevealed, setBarsRevealed] = useState(false);
   const sectionRef = useScrollRevealMultiple();
   const progressRef = useRef<HTMLDivElement>(null);
+
+  /* Decorative WebGL orb behind the heading */
+  const quality = useQuality();
+  const { ref: orbHost, near: orbNear } = useNearViewport<HTMLDivElement>(400);
 
   // Observe when the skills grid enters viewport to trigger progress bars
   useEffect(() => {
@@ -70,6 +78,15 @@ export default function Skills() {
       <div className="section-inner">
         {/* ── Header ── */}
         <header className="skills-header reveal">
+          {/* WebGL orb — purely decorative, sits behind the copy */}
+          <div ref={orbHost} className="skills-orb" aria-hidden="true">
+            {quality !== 'off' && orbNear && (
+              <Suspense fallback={null}>
+                <SkillsOrb quality={quality} />
+              </Suspense>
+            )}
+          </div>
+
           <span className="section-label">// Skills &amp; Expertise</span>
           <h2 className="section-title">
             My <span className="gradient-text">Tech Arsenal</span>

@@ -54,8 +54,29 @@
 }
 
 /* ============================================================
-   FLOATING GEOMETRIC SHAPES
+   WEBGL OBJECT LAYER
    ============================================================ */
+.hero__three-host {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  /* Soft edge falloff so objects dissolve into the page instead of
+     being clipped by the viewport boundary. */
+  -webkit-mask-image: radial-gradient(ellipse 82% 82% at 50% 50%, #000 55%, transparent 100%);
+  mask-image: radial-gradient(ellipse 82% 82% at 50% 50%, #000 55%, transparent 100%);
+}
+
+/* ============================================================
+   FLOATING GEOMETRIC SHAPES
+   (fallback decoration — replaced by the WebGL layer when the
+   device supports it and motion is allowed)
+   ============================================================ */
+.hero--3d .hero__shapes {
+  opacity: 0;
+  transition: opacity var(--duration-slower) var(--ease-out-expo);
+}
+
 .hero__shapes {
   position: absolute;
   inset: 0;
@@ -578,6 +599,11 @@
   .hero__shape--cross {
     width: 25px;
     height: 25px;
+  }
+
+  /* Keep the copy dominant on small screens */
+  .hero__three-host {
+    opacity: 0.7;
   }
 
   .hero__ctas {

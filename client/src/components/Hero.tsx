@@ -1,6 +1,11 @@
-import { useEffect, useRef } from 'react';
+import { Suspense, lazy, useEffect, useRef } from 'react';
 import { PERSONAL } from '../utils/constants';
+import { useNearViewport, useQuality } from '../three/hooks';
 import './Hero.css';
+
+/* three.js lives in its own chunk — fetched after first paint, and
+   only on devices that pass the capability check. */
+const HeroObjects = lazy(() => import('../three/HeroObjects'));
 
 /* ============================================================
    GRADIENT MESH — Canvas Renderer
@@ -65,6 +70,11 @@ function animateBlobs(
 
 const Hero: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  /* WebGL layer: only on capable devices, only once in view */
+  const quality = useQuality();
+  const { ref: sceneHost, near } = useNearViewport<HTMLDivElement>();
+  const show3D = quality !== 'off';
 
   /* ---- Canvas animation loop ---- */
   useEffect(() => {
@@ -146,11 +156,21 @@ const Hero: React.FC = () => {
   };
 
   return (
-    <section id="hero" className="hero">
+    <section id="hero" className={`hero ${show3D ? 'hero--3d' : ''}`}>
       {/* Background layers */}
       <canvas ref={canvasRef} className="hero__canvas" aria-hidden="true" />
       <div className="hero__grain" aria-hidden="true" />
       <div className="hero__vignette" aria-hidden="true" />
+
+      {/* WebGL objects — sits above the vignette so the metals stay
+          crisp; the CSS shapes below are the no-WebGL fallback. */}
+      <div ref={sceneHost} className="hero__three-host" aria-hidden="true">
+        {show3D && near && (
+          <Suspense fallback={null}>
+            <HeroObjects quality={quality} />
+          </Suspense>
+        )}
+      </div>
 
       {/* Floating geometric shapes */}
       <div className="hero__shapes" aria-hidden="true">

@@ -96,12 +96,72 @@
 }
 
 /* --- Project Grid --- */
-.projects-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-xl);
+/* --- Projects Carousel (single row) --- */
+.projects-carousel {
   position: relative;
   margin-bottom: var(--space-2xl);
+}
+
+.projects-carousel__controls {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.projects-carousel__controls .projects-design__nav {
+  width: 44px;
+  height: 44px;
+}
+
+.projects-carousel__track {
+  display: flex;
+  gap: var(--space-xl);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 2px;
+  /* Room for the cards' 3D tilt and glow — an overflow-x container
+     computes overflow-y to auto, so the tilt must stay inside the box */
+  padding: var(--space-lg) 2px var(--space-xl);
+
+  /* The native scrollbar would cut across the card shadows */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  /* Fade whichever edge still has cards behind it */
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 3%, #000 97%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, #000 3%, #000 97%, transparent 100%);
+}
+
+.projects-carousel__track::-webkit-scrollbar {
+  display: none;
+}
+
+.projects-carousel__track.is-at-start {
+  -webkit-mask-image: linear-gradient(to right, #000 0, #000 97%, transparent 100%);
+  mask-image: linear-gradient(to right, #000 0, #000 97%, transparent 100%);
+}
+
+.projects-carousel__track.is-at-end {
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 3%, #000 100%);
+  mask-image: linear-gradient(to right, transparent 0, #000 3%, #000 100%);
+}
+
+.projects-carousel__track.is-at-start.is-at-end {
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+.projects-carousel__track > .projects-card-wrapper {
+  flex: 0 0 min(430px, 84vw);
+  scroll-snap-align: start;
+}
+
+.projects-design__nav:disabled {
+  opacity: 0.3;
+  cursor: default;
+  pointer-events: none;
 }
 
 /* --- Project Card --- */
@@ -342,8 +402,13 @@
 }
 
 .projects-design__nav {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
   width: 48px;
   height: 48px;
+  padding: 0;
+  line-height: 1;
   border-radius: 50%;
   border: 1px solid var(--border-default);
   background: var(--bg-card);
@@ -646,7 +711,7 @@
 
 /* --- Responsive --- */
 @media (max-width: 1024px) {
-  .projects-grid {
+  .projects-carousel__track {
     gap: var(--space-lg);
   }
 
@@ -666,9 +731,8 @@
 }
 
 @media (max-width: 768px) {
-  .projects-grid {
-    grid-template-columns: 1fr;
-    gap: var(--space-xl);
+  .projects-carousel__track > .projects-card-wrapper {
+    flex-basis: min(320px, 86vw);
   }
 
   .projects-filters {
@@ -694,12 +758,17 @@
     align-items: flex-start;
   }
 
+  /* Stretching these to full width turned the round buttons into
+     ellipses — keep them circular and tuck them to the right */
   .projects-design__controls {
     align-self: stretch;
+    justify-content: flex-end;
   }
 
   .projects-design__nav {
-    flex: 1;
+    flex: 0 0 auto;
+    width: 44px;
+    height: 44px;
   }
 
   .projects-design__card {
