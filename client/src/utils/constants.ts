@@ -197,6 +197,23 @@ export const PROJECTS: Project[] = [
       'Kept the whole tool client-side and instant — no upload step, no render queue, immediate visual feedback',
     ],
   },
+  {
+    id: 5,
+    title: 'Settlers 3D – Online Strategy Board Game',
+    description:
+      'A 3D strategy board game for 3–4 players: build settlements and roads across a hex world, trade resources, play development cards, and race to the winning score — online in realtime or solo against bots.',
+    category: 'web',
+    tags: ['React', 'Three.js', 'Socket.io', 'WebGL', 'Node.js'],
+    image: '',
+    liveUrl: 'https://caten.onrender.com/',
+    githubUrl: '',
+    featured: true,
+    highlights: [
+      'Built an interactive 3D hex board in React + Three.js with settlements, roads, dice-driven resource production, and robber mechanics',
+      'Added realtime multiplayer over Socket.io with a create/join room flow for 3–4 players',
+      'Implemented the full rule set — trading, development cards, Longest Road and Largest Army — plus AI bots for solo play',
+    ],
+  },
 ];
 
 export const DESIGN_PROJECTS: DesignProject[] = [
