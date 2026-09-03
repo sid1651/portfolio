@@ -16,15 +16,30 @@ const watchErrors = (page, label) => {
   })
 }
 
+const scrollTo = (page, position) =>
+  page.evaluate((y) => {
+    if (window.__smoother) window.__smoother.scrollTo(y, false)
+    else window.scrollTo(0, y)
+  }, position)
+
 const traversePage = async (page) => {
   const viewportHeight = page.viewportSize()?.height ?? 900
   const pageHeight = await page.evaluate(() => document.documentElement.scrollHeight)
   for (let y = 0; y < pageHeight; y += Math.round(viewportHeight * 0.72)) {
-    await page.evaluate((position) => window.scrollTo(0, position), y)
-    await page.waitForTimeout(90)
+    await scrollTo(page, y)
+    await page.waitForTimeout(260)
   }
-  await page.evaluate(() => window.scrollTo(0, 0))
-  await page.waitForTimeout(220)
+  await scrollTo(page, 0)
+  await page.waitForTimeout(400)
+}
+
+/**
+ * ScrollSmoother drives the page with a transform, which makes Playwright's
+ * stitched full-page capture meaningless. Drop back to native scrolling first.
+ */
+const settleForCapture = async (page) => {
+  await page.evaluate(() => window.__disableSmoothScroll?.())
+  await page.waitForTimeout(320)
 }
 
 try {
@@ -35,6 +50,7 @@ try {
   const desktopPage = await desktop.newPage()
   watchErrors(desktopPage, 'desktop')
   await desktopPage.goto(baseUrl, { waitUntil: 'networkidle' })
+  await desktopPage.waitForTimeout(2600) // let the hero intro finish
 
   await desktopPage.getByRole('navigation', { name: 'Main navigation' }).waitFor()
   await desktopPage.getByRole('heading', { level: 1, name: 'Narava Venkat Siddharth' }).waitFor()
@@ -42,6 +58,7 @@ try {
   assert.equal(await desktopPage.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth), true)
 
   await traversePage(desktopPage)
+  await settleForCapture(desktopPage)
   await desktopPage.screenshot({ path: `${outputDir}/desktop-light.png`, fullPage: true })
   await desktopPage.getByRole('button', { name: 'Close window shade for dark mode' }).click()
   assert.equal(await desktopPage.locator('html').getAttribute('data-theme'), 'dark')
@@ -54,6 +71,7 @@ try {
   await desktopPage.getByRole('main', { name: 'LumaLoop case study' }).waitFor()
   await desktopPage.getByRole('link', { name: 'View live project' }).waitFor()
   await traversePage(desktopPage)
+  await settleForCapture(desktopPage)
   await desktopPage.screenshot({ path: `${outputDir}/case-study.png`, fullPage: true })
   await desktop.close()
 
@@ -64,7 +82,9 @@ try {
   const mobilePage = await mobile.newPage()
   watchErrors(mobilePage, 'mobile')
   await mobilePage.goto(baseUrl, { waitUntil: 'networkidle' })
+  await mobilePage.waitForTimeout(2600)
   await traversePage(mobilePage)
+  await settleForCapture(mobilePage)
   await mobilePage.getByRole('button', { name: 'Open navigation menu' }).click()
   await mobilePage.getByRole('link', { name: 'Work', exact: true }).waitFor()
   assert.equal(await mobilePage.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth), true)

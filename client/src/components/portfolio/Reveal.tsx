@@ -1,24 +1,41 @@
-import { motion, useReducedMotion } from 'motion/react'
-import type { ReactNode } from 'react'
+import { useRef, type ReactNode } from 'react'
+import { EASE, gsap, useGSAP } from '../../animation/gsap'
+import { useReducedMotion } from '../../hooks/useReducedMotion'
 
 type RevealProps = {
   children: ReactNode
   className?: string
   delay?: number
+  y?: number
+  /** Animate the direct children in sequence instead of the block as a whole. */
+  stagger?: number
 }
 
-export function Reveal({ children, className, delay = 0 }: RevealProps) {
-  const reduceMotion = useReducedMotion()
+export function Reveal({ children, className, delay = 0, y = 30, stagger }: RevealProps) {
+  const container = useRef<HTMLDivElement>(null)
+  const reduced = useReducedMotion()
+
+  useGSAP(() => {
+    const element = container.current
+    if (reduced || !element) return
+
+    const targets = stagger ? Array.from(element.children) : element
+    if (Array.isArray(targets) && targets.length === 0) return
+
+    gsap.from(targets, {
+      opacity: 0,
+      y,
+      duration: 1,
+      delay,
+      stagger,
+      ease: EASE,
+      scrollTrigger: { trigger: element, start: 'top 88%', once: true },
+    })
+  }, { dependencies: [reduced] })
 
   return (
-    <motion.div
-      className={className}
-      initial={reduceMotion ? false : { opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.16 }}
-      transition={{ duration: 0.72, delay, ease: [0.16, 1, 0.3, 1] }}
-    >
+    <div className={className} ref={container}>
       {children}
-    </motion.div>
+    </div>
   )
 }

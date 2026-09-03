@@ -1,23 +1,52 @@
-import {
-  ArrowLeft,
-  ArrowRight,
-  ArrowUpRight,
-  GithubLogo,
-  Moon,
-  Sun,
-} from '@phosphor-icons/react'
+import { useRef } from 'react'
+import { ArrowRight, ArrowUpRight, GithubLogo } from '@phosphor-icons/react'
 import { Link, Navigate, useParams } from 'react-router-dom'
+import { EASE, gsap, useGSAP } from '../animation/gsap'
 import { ProjectVisual } from '../components/portfolio/ProjectVisual'
 import { Reveal } from '../components/portfolio/Reveal'
 import { projectBySlug, projects } from '../data/projects'
-import { useTheme } from '../hooks/useTheme'
+import { useReducedMotion } from '../hooks/useReducedMotion'
 
-const cleanCopy = (value: string) => value.replace(/[\u2013\u2014]/g, '-')
+const cleanCopy = (value: string) => value.replace(/[–—]/g, '-')
 
 export default function CaseStudyPage() {
   const { slug } = useParams()
   const project = projectBySlug(slug)
-  const { theme, toggleTheme } = useTheme()
+  const reduced = useReducedMotion()
+  const frame = useRef<HTMLDivElement>(null)
+
+  useGSAP(() => {
+    if (reduced || !frame.current) return
+    const q = gsap.utils.selector(frame.current)
+
+    gsap.timeline({ defaults: { ease: EASE } })
+      .from(q('.case-hero__copy > *'), { opacity: 0, y: 26, duration: 0.9, stagger: 0.08 })
+      .from(q('.case-facts > div'), { opacity: 0, y: 20, duration: 0.8, stagger: 0.07 }, '-=0.6')
+
+    const cover = q('.case-cover .project-visual img')[0]
+    if (cover) {
+      gsap.set(cover, { scale: 1.1 })
+      gsap.fromTo(
+        cover,
+        { yPercent: -2.4 },
+        {
+          yPercent: 2.4,
+          ease: 'none',
+          scrollTrigger: { trigger: q('.case-cover')[0], start: 'top bottom', end: 'bottom top', scrub: true },
+        },
+      )
+    }
+
+    const next = q('.case-next a')[0]
+    if (next) {
+      gsap.from(next, {
+        opacity: 0,
+        y: 30,
+        duration: 1,
+        scrollTrigger: { trigger: q('.case-next')[0], start: 'top 88%', once: true },
+      })
+    }
+  }, { scope: frame, dependencies: [reduced, slug] })
 
   if (!project) return <Navigate to="/" replace />
 
@@ -28,28 +57,7 @@ export default function CaseStudyPage() {
   const narrativeSections = project.sections.filter((section) => section.type === 'overview' || section.type === 'text')
 
   return (
-    <div className="site-frame case-page">
-      <a className="skip-link" href="#case-content">Skip to content</a>
-      <header className="case-header">
-        <div className="page-shell case-header__inner">
-          <Link className="case-header__back" to="/">
-            <ArrowLeft size={18} weight="bold" aria-hidden="true" />
-            All work
-          </Link>
-          <Link className="site-mark" to="/" aria-label="Narava Venkat Siddharth home">
-            <span>SN</span>
-          </Link>
-          <button
-            className="case-header__theme"
-            type="button"
-            onClick={toggleTheme}
-            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-          >
-            {theme === 'dark' ? <Sun size={19} /> : <Moon size={19} />}
-          </button>
-        </div>
-      </header>
-
+    <div className="site-frame case-page" ref={frame}>
       <main id="case-content" className="case-main" aria-label={`${shortTitle} case study`}>
         <section className="case-hero page-shell">
           <div className="case-hero__copy">
@@ -88,7 +96,7 @@ export default function CaseStudyPage() {
           </dl>
         </section>
 
-        <Reveal className="case-cover page-shell">
+        <Reveal className="case-cover page-shell" y={44}>
           <ProjectVisual src={project.thumbnails[0]} alt={`${shortTitle} product interface`} eager />
         </Reveal>
 
