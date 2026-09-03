@@ -1,5 +1,7 @@
 import { EXPERIENCES, PERSONAL, SOCIAL_LINKS } from '../utils/constants'
 
+const cleanCopy = (value: string) => value.replace(/[\u2013\u2014]/g, '-')
+
 export type ProjectLink = {
   slug: string
   title: string
@@ -32,19 +34,19 @@ export const portfolioIdentity = {
 }
 
 const projectLinks: ProjectLink[] = [
-  { slug: 'kodikos', title: 'Kodikos', summary: 'A real-time collaborative code editor built for teams.', thumbnails: ['/projects/kodikos.svg', '/projects/kodikos.svg', '/projects/kodikos.svg'] },
-  { slug: 'estia-stay', title: 'Estia Stay', summary: 'A booking platform with practical owner workflows.', thumbnails: ['/projects/estia-stay.svg', '/projects/estia-stay.svg', '/projects/estia-stay.svg'] },
-  { slug: 'lumaloop', title: 'LumaLoop', summary: 'A private, browser-based motion studio.', thumbnails: ['/projects/lumaloop.svg', '/projects/lumaloop.svg', '/projects/lumaloop.svg'] },
-  { slug: 'sphere-point', title: 'Sphere / Point', summary: 'An interactive WebGL formation visualizer.', thumbnails: ['/projects/sphere-point.svg', '/projects/sphere-point.svg', '/projects/sphere-point.svg'] },
-  { slug: 'settlers-3d', title: 'Settlers 3D', summary: 'A realtime 3D strategy board game.', thumbnails: ['/projects/settlers-3d.svg', '/projects/settlers-3d.svg', '/projects/settlers-3d.svg'] },
-  { slug: 'design-lab', title: 'Interface Design Lab', summary: 'A set of motion-led product interface studies.', thumbnails: ['/projects/design-lab.svg', '/projects/design-lab.svg', '/projects/design-lab.svg'] },
+  { slug: 'kodikos', title: 'Kodikos', summary: 'A real-time collaborative code editor built for teams.', thumbnails: ['/projects/kodikos.avif', '/projects/kodikos.avif', '/projects/kodikos.avif'] },
+  { slug: 'estia-stay', title: 'Estia Stay', summary: 'A booking platform with practical owner workflows.', thumbnails: ['/projects/estia-stay.avif', '/projects/estia-stay.avif', '/projects/estia-stay.avif'] },
+  { slug: 'lumaloop', title: 'LumaLoop', summary: 'A private, browser-based motion studio.', thumbnails: ['/projects/lumaloop.avif', '/projects/lumaloop.avif', '/projects/lumaloop.avif'] },
+  { slug: 'sphere-point', title: 'Sphere / Point', summary: 'An interactive WebGL formation visualizer.', thumbnails: ['/projects/sphere-point.avif', '/projects/sphere-point.avif', '/projects/sphere-point.avif'] },
+  { slug: 'settlers-3d', title: 'Settlers 3D', summary: 'A realtime 3D strategy board game.', thumbnails: ['/projects/settlers-3d.avif', '/projects/settlers-3d.avif', '/projects/settlers-3d.avif'] },
+  { slug: 'design-lab', title: 'Interface Design Lab', summary: 'A set of motion-led product interface studies.', thumbnails: ['/projects/design-lab.avif', '/projects/design-lab.avif', '/projects/design-lab.avif'] },
 ]
 
 const routes = ['DEL / BEN', 'BEN / HYD', 'HYD / BLR', 'BLR / WORLD']
 const groupedProjects = [projectLinks.slice(0, 1), projectLinks.slice(1, 3), projectLinks.slice(3, 5), projectLinks.slice(5)]
 
 export const careerEntries: CareerEntry[] = EXPERIENCES.map((experience, index) => ({
-  year: experience.period.replaceAll('—', '-').replaceAll('–', '-'),
+  year: cleanCopy(experience.period),
   route: routes[index] ?? 'DEL / WORLD',
   company: experience.company,
   role: experience.role,

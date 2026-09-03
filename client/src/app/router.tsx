@@ -1,11 +1,7 @@
-import { Navigate, Outlet, createBrowserRouter, createMemoryRouter } from 'react-router-dom'
+import { Navigate, createBrowserRouter, createMemoryRouter } from 'react-router-dom'
 import CaseStudyPage from '../pages/CaseStudyPage'
 import HomePage from '../pages/HomePage'
-import { RouteEffects } from './RouteEffects'
-
-function AppLayout() {
-  return <><RouteEffects /><Outlet /></>
-}
+import { AppLayout } from './AppLayout'
 
 export const routes = [{
   element: <AppLayout />,

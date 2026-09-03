@@ -6,9 +6,26 @@ class ResizeObserverStub implements ResizeObserver {
   disconnect() {}
 }
 
+class IntersectionObserverStub implements IntersectionObserver {
+  readonly root = null
+  readonly rootMargin = '0px'
+  readonly scrollMargin = '0px'
+  readonly thresholds = [0]
+
+  disconnect() {}
+  observe() {}
+  takeRecords() { return [] }
+  unobserve() {}
+}
+
 Object.defineProperty(window, 'ResizeObserver', {
   configurable: true,
   value: ResizeObserverStub,
+})
+
+Object.defineProperty(window, 'IntersectionObserver', {
+  configurable: true,
+  value: IntersectionObserverStub,
 })
 
 Object.defineProperty(window, 'matchMedia', {

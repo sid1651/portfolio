@@ -1,5 +1,7 @@
 import { DESIGN_PROJECTS, PROJECTS } from '../utils/constants'
 
+const cleanCopy = (value: string) => value.replace(/[\u2013\u2014]/g, '-')
+
 export type Media = {
   src?: string
   poster?: string
@@ -31,29 +33,29 @@ export type ProjectRecord = {
 }
 
 const sourceProjects = [
-  { slug: 'kodikos', source: PROJECTS[0], image: '/projects/kodikos.svg', years: '2025-2026' },
-  { slug: 'estia-stay', source: PROJECTS[1], image: '/projects/estia-stay.svg', years: '2025' },
-  { slug: 'lumaloop', source: PROJECTS[2], image: '/projects/lumaloop.svg', years: '2026' },
-  { slug: 'sphere-point', source: PROJECTS[3], image: '/projects/sphere-point.svg', years: '2026' },
-  { slug: 'settlers-3d', source: PROJECTS[4], image: '/projects/settlers-3d.svg', years: '2026' },
+  { slug: 'kodikos', source: PROJECTS[0], image: '/projects/kodikos.avif', years: '2025-2026' },
+  { slug: 'estia-stay', source: PROJECTS[1], image: '/projects/estia-stay.avif', years: '2025' },
+  { slug: 'lumaloop', source: PROJECTS[2], image: '/projects/lumaloop.avif', years: '2026' },
+  { slug: 'sphere-point', source: PROJECTS[3], image: '/projects/sphere-point.avif', years: '2026' },
+  { slug: 'settlers-3d', source: PROJECTS[4], image: '/projects/settlers-3d.avif', years: '2026' },
 ]
 
 export const projects: ProjectRecord[] = sourceProjects.map(({ slug, source, image, years }) => ({
   slug,
-  title: source.title.replaceAll('—', '-').replaceAll('–', '-'),
+  title: cleanCopy(source.title),
   years,
   platforms: source.tags,
-  blurb: source.description.replaceAll('—', '-').replaceAll('–', '-'),
-  summary: source.highlights[0].replaceAll('—', '-').replaceAll('–', '-'),
+  blurb: cleanCopy(source.description),
+  summary: cleanCopy(source.highlights[0]),
   liveUrl: source.liveUrl || undefined,
   githubUrl: source.githubUrl || undefined,
   thumbnails: [image, image, image],
   sections: [
-    { type: 'overview', label: 'Role', body: source.highlights[0].replaceAll('—', '-').replaceAll('–', '-') },
+    { type: 'overview', label: 'Role', body: cleanCopy(source.highlights[0]) },
     { type: 'figure', media: { src: image, alt: `${source.title} project overview` }, aspect: 1.5, wide: true },
-    { type: 'text', title: 'System', body: source.highlights[1].replaceAll('—', '-').replaceAll('–', '-') },
+    { type: 'text', title: 'System', body: cleanCopy(source.highlights[1]) },
     { type: 'figure', media: { before: image, after: image, alt: `${source.title} before and after comparison` }, aspect: 1.5 },
-    { type: 'text', title: 'Outcome', body: source.highlights[2].replaceAll('—', '-').replaceAll('–', '-') },
+    { type: 'text', title: 'Outcome', body: cleanCopy(source.highlights[2]) },
   ],
 }))
 
@@ -63,20 +65,20 @@ projects.push({
   title: 'Interface Design Lab',
   years: '2025-2026',
   platforms: ['Figma', 'Motion', 'Mobile UI'],
-  blurb: designSource.description,
-  summary: designSource.highlights[0],
+  blurb: cleanCopy(designSource.description),
+  summary: cleanCopy(designSource.highlights[0]),
   liveUrl: designSource.figmaUrl,
-  thumbnails: ['/projects/design-lab.svg', '/projects/design-lab.svg', '/projects/design-lab.svg'],
+  thumbnails: ['/projects/design-lab.avif', '/projects/design-lab.avif', '/projects/design-lab.avif'],
   sections: [
-    { type: 'overview', label: 'Practice', body: designSource.highlights[0] },
-    { type: 'figure', media: { src: '/projects/design-lab.svg', alt: 'Interface Design Lab visual study' }, aspect: 1.5, wide: true },
-    { type: 'text', title: 'Motion', body: designSource.highlights[1] },
+    { type: 'overview', label: 'Practice', body: cleanCopy(designSource.highlights[0]) },
+    { type: 'figure', media: { src: '/projects/design-lab.avif', alt: 'Interface Design Lab visual study' }, aspect: 1.5, wide: true },
+    { type: 'text', title: 'Motion', body: cleanCopy(designSource.highlights[1]) },
     { type: 'phones', rows: [[
-      { src: '/projects/design-lab.svg', alt: 'Mobile interface study one' },
-      { src: '/projects/design-lab.svg', alt: 'Mobile interface study two' },
-      { src: '/projects/design-lab.svg', alt: 'Mobile interface study three' },
+      { src: '/projects/design-lab.avif', alt: 'Mobile interface study one' },
+      { src: '/projects/design-lab.avif', alt: 'Mobile interface study two' },
+      { src: '/projects/design-lab.avif', alt: 'Mobile interface study three' },
     ]] },
-    { type: 'text', title: 'System', body: designSource.highlights[2] },
+    { type: 'text', title: 'System', body: cleanCopy(designSource.highlights[2]) },
   ],
 })
 
