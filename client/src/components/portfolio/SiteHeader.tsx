@@ -1,6 +1,6 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ArrowUpRight, List, X } from '@phosphor-icons/react'
-import { gsap, ScrollTrigger, useGSAP } from '../../animation/gsap'
+import { gsap, ScrollSmoother, ScrollTrigger, useGSAP } from '../../animation/gsap'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
 
 const navigation = [
@@ -65,6 +65,38 @@ export function SiteHeader() {
       chrome.kill()
     }
   }, { scope: header, dependencies: [reduced] })
+
+  // The drop-down panel sits over the page, so the page underneath must not
+  // scroll with it. ScrollSmoother owns the scroll when it is running; without
+  // it (reduced motion) fall back to clamping the native scroller.
+  useEffect(() => {
+    const root = document.documentElement
+    const lock = (locked: boolean) => {
+      const smoother = ScrollSmoother.get()
+      if (smoother) smoother.paused(locked)
+      else root.classList.toggle('nav-locked', locked)
+    }
+
+    lock(menuOpen)
+    if (!menuOpen) return
+
+    // A rotate or resize past the breakpoint hides the toggle, which would
+    // otherwise strand the page in its locked state with no way to release it.
+    const desktop = window.matchMedia('(min-width: 768px)')
+    const onDesktop = () => desktop.matches && setMenuOpen(false)
+    desktop.addEventListener('change', onDesktop)
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setMenuOpen(false)
+    }
+    document.addEventListener('keydown', onKeyDown)
+
+    return () => {
+      desktop.removeEventListener('change', onDesktop)
+      document.removeEventListener('keydown', onKeyDown)
+      lock(false)
+    }
+  }, [menuOpen])
 
   useGSAP(() => {
     if (reduced || !menuOpen) return

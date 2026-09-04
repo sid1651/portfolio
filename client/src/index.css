@@ -184,6 +184,13 @@ dd {
   will-change: transform;
 }
 
+/* Native-scroll fallback for the open mobile menu; ScrollSmoother pauses
+   itself instead, so this only applies when the smoother is not running. */
+:root.nav-locked,
+:root.nav-locked body {
+  overflow: hidden;
+}
+
 .site-nav {
   display: grid;
   grid-template-columns: auto 1fr auto;
