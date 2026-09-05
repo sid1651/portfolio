@@ -54,8 +54,11 @@
   box-sizing: border-box;
 }
 
+/* No `scroll-behavior: smooth` here: it desyncs the scroll position that
+   ScrollTrigger samples each frame, and in-page links are animated in JS with a
+   constant duration instead. `scroll-padding-top` still keeps keyboard focus
+   and find-in-page clear of the fixed header. */
 html {
-  scroll-behavior: smooth;
   scroll-padding-top: calc(var(--header-height) + 20px);
   overflow-x: hidden;
   background: var(--surface);
@@ -174,9 +177,13 @@ dd {
   box-shadow: 0 12px 40px rgb(0 0 0 / 30%);
 }
 
-/* SplitText masks its line boxes; the wrapper must not clip descenders. */
+/* SplitText masks its line boxes; the wrapper must not clip descenders. The
+   negative margin cancels that padding in layout, so splitting and reverting a
+   heading leave the page height unchanged — otherwise every reveal shortens the
+   document mid-scroll and nudges everything below it. */
 .split-line {
   padding-bottom: 0.06em;
+  margin-bottom: -0.06em;
   will-change: transform;
 }
 

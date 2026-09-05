@@ -1,10 +1,11 @@
 import { gsap } from 'gsap'
 import { useGSAP } from '@gsap/react'
 import { ScrollSmoother } from 'gsap/ScrollSmoother'
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SplitText } from 'gsap/SplitText'
 
-gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollSmoother, SplitText)
+gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollSmoother, ScrollToPlugin, SplitText)
 
 gsap.defaults({ ease: 'power3.out', duration: 0.9 })
 
@@ -29,4 +30,4 @@ export const splitLines = (element: Element) =>
     autoSplit: true,
   })
 
-export { gsap, useGSAP, ScrollTrigger, ScrollSmoother, SplitText }
+export { gsap, useGSAP, ScrollTrigger, ScrollSmoother, ScrollToPlugin, SplitText }
